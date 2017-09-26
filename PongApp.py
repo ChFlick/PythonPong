@@ -1,7 +1,7 @@
 from kivy.app import App
 from kivy.clock import Clock
 
-from Pong.PongGame import PongGame
+from PongGame import PongGame
 
 
 class PongApp(App):
