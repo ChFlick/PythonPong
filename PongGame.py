@@ -3,14 +3,24 @@ from random import randint
 from kivy.properties import ObjectProperty
 from kivy.uix.widget import Widget
 
+from PongPaddle import InputType
+
 
 class PongGame(Widget):
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
 
+    def __init__(self, **kwargs):
+        super(PongGame, self).__init__(**kwargs)
+        self.player1.init_input(InputType.WS)
+        self.player2.init_input(InputType.UPDOWN)
+
     def update(self, dt):
         self.ball.move()
+
+        self.player1.update()
+        self.player2.update()
 
         self.__check_player_hit()
         self.__check_wall_hit()
