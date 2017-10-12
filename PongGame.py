@@ -11,10 +11,13 @@ class PongGame(Widget):
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
 
-    def __init__(self, **kwargs):
+    def __init__(self, movementoption, **kwargs):
         super(PongGame, self).__init__(**kwargs)
-        self.player1.init_input(InputType.WS)
-        self.player2.init_input(InputType.UPDOWN)
+
+        self.movementoption = movementoption
+        if movementoption == 'keyboard':
+            self.player1.init_input(InputType.WS)
+            self.player2.init_input(InputType.UPDOWN)
 
     def update(self, dt):
         self.ball.move()
@@ -57,7 +60,8 @@ class PongGame(Widget):
 
     '''move the player paddles by touching the sides'''
     def on_touch_move(self, touch):
-        if touch.x < self.width / 3:
-            self.player1.center_y = touch.y
-        if touch.x > self.width - self.width / 3:
-            self.player2.center_y = touch.y
+        if self.movementoption == 'touch':
+            if touch.x < self.width / 3:
+                self.player1.center_y = touch.y
+            if touch.x > self.width - self.width / 3:
+                self.player2.center_y = touch.y
