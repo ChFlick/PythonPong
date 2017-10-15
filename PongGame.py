@@ -18,6 +18,9 @@ class PongGame(Widget):
         if movementoption == 'keyboard':
             self.player1.init_input(InputType.WS)
             self.player2.init_input(InputType.UPDOWN)
+        elif movementoption == 'ki':
+            self.player1.init_input(InputType.WS)
+            self.player2.init_input(InputType.KI)
 
     def update(self, dt):
         self.ball.move()
@@ -60,8 +63,8 @@ class PongGame(Widget):
 
     '''move the player paddles by touching the sides'''
     def on_touch_move(self, touch):
-        if self.movementoption == 'touch':
+        if self.movementoption != 'keyboard':
             if touch.x < self.width / 3:
                 self.player1.center_y = touch.y
-            if touch.x > self.width - self.width / 3:
+            if self.movementoption == 'touch' and touch.x > self.width - self.width / 3:
                 self.player2.center_y = touch.y
