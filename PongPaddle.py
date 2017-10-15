@@ -3,6 +3,8 @@ from kivy.uix.widget import Widget
 from kivy.core.window import Keyboard as KivyKeyboard
 from kivy.vector import Vector
 from Keyboard import Keyboard
+from math import sin, cos
+import numpy as np
 
 from enum import Enum
 
@@ -15,6 +17,7 @@ class InputType(Enum):
 
 
 class PongPaddle(Widget):
+    MAX_BOUNCE_ANGLE = 1.0472
     keyboard = Keyboard()
     score = NumericProperty(0)
 
@@ -37,10 +40,13 @@ class PongPaddle(Widget):
     def bounce_ball(self, ball):
         if self.collide_widget(ball):
             vx, vy = ball.velocity
-            offset = (ball.center_y - self.center_y) / (self.height / 4)
-            bounced = Vector(-1 * vx, vy)
-            vel = bounced * 1.1
-            ball.velocity = vel.x, vel.y + offset
+            dir = -1 if vx > 0 else 1
+            ballspeed = np.linalg.norm((vx, vy))
+            offset = (ball.center_y - self.center_y) / (self.height / 2)
+            bounceAngle = offset * self.MAX_BOUNCE_ANGLE
+            vx = dir * ballspeed * 1.1 * cos(bounceAngle)
+            vy = ballspeed * 1.1 * sin(bounceAngle)
+            ball.velocity = float(vx), float(vy)
 
     def update(self):
         if self.keyboard.pressedKeys.get(self.__btn_up) and self.y + self.height < self.parent.height:
